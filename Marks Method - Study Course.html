@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Marks Method — Study Course</title>
+<style>
+  :root{
+    --ink:#211d17; --ink-soft:#4a4338; --parch:#f6f1e7; --parch-2:#efe7d7;
+    --card:#fffdf8; --oak:#8a6d3b; --oak-deep:#6b5224; --gold:#b9912f;
+    --rule:#d9cdb4; --green:#3f6b4a; --red:#9a3b2f; --shadow:0 2px 14px rgba(60,45,20,.08);
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--parch);color:var(--ink);
+    font-family:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+    line-height:1.62;font-size:17px;}
+  .wrap{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:262px 1fr;gap:0;}
+  /* Sidebar nav */
+  nav.toc{position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;
+    padding:26px 20px 60px;border-right:1px solid var(--rule);background:var(--parch-2);}
+  nav.toc h1{font-size:19px;margin:0 0 4px;letter-spacing:.3px;color:var(--oak-deep)}
+  nav.toc .sub{font-size:12.5px;color:var(--ink-soft);font-style:italic;margin-bottom:18px;text-transform:uppercase;letter-spacing:1px}
+  nav.toc a{display:block;text-decoration:none;color:var(--ink-soft);font-size:13.5px;
+    padding:3px 0;border:0;}
+  nav.toc a.part{margin-top:14px;font-weight:700;color:var(--oak-deep);font-size:13px;
+    text-transform:uppercase;letter-spacing:.6px}
+  nav.toc a.concept{padding-left:12px}
+  nav.toc a:hover{color:var(--gold)}
+  nav.toc .tools{margin-top:20px;padding-top:14px;border-top:1px solid var(--rule)}
+  /* Main */
+  main{padding:46px 54px 120px;max-width:820px}
+  .hero{border-bottom:2px solid var(--oak);padding-bottom:26px;margin-bottom:8px}
+  .hero .eyebrow{text-transform:uppercase;letter-spacing:3px;font-size:12px;color:var(--oak);font-style:normal}
+  .hero h1{font-size:42px;line-height:1.08;margin:8px 0 6px;letter-spacing:-.5px}
+  .hero p.tag{font-style:italic;color:var(--ink-soft);font-size:18px;margin:6px 0 18px}
+  .epigraph{background:var(--parch-2);border-left:3px solid var(--gold);padding:14px 20px;margin:16px 0;
+    font-style:italic;font-size:16px;color:var(--ink-soft)}
+  .epigraph .who{display:block;font-style:normal;font-size:13px;margin-top:6px;color:var(--oak-deep)}
+  .howto{background:var(--card);border:1px solid var(--rule);border-radius:8px;padding:18px 22px;margin:22px 0;
+    box-shadow:var(--shadow);font-size:15.5px}
+  .howto b{color:var(--oak-deep)}
+  .parthead{margin:48px 0 6px;padding-top:14px;border-top:1px solid var(--rule)}
+  .parthead .pn{font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--oak)}
+  .parthead h2{font-size:29px;margin:4px 0 4px;letter-spacing:-.3px}
+  .parthead .intro{color:var(--ink-soft);font-size:16px}
+  /* Concept cards */
+  .concept{background:var(--card);border:1px solid var(--rule);border-radius:9px;margin:16px 0;
+    box-shadow:var(--shadow);overflow:hidden}
+  .concept > button{all:unset;display:flex;align-items:center;gap:14px;width:100%;cursor:pointer;
+    padding:16px 20px;box-sizing:border-box}
+  .concept > button:hover{background:var(--parch)}
+  .concept .num{flex:0 0 38px;height:38px;border-radius:50%;background:var(--oak);color:#fff;
+    display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:700}
+  .concept .ctitle{flex:1;font-size:19px;font-weight:700;color:var(--ink)}
+  .concept .chev{flex:0 0 auto;color:var(--oak);transition:transform .25s;font-size:14px}
+  .concept.open .chev{transform:rotate(90deg)}
+  .concept .body{display:none;padding:2px 22px 22px 22px;border-top:1px solid var(--rule)}
+  .concept.open .body{display:block;animation:fade .3s ease}
+  @keyframes fade{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:none}}
+  .beat{margin:14px 0}
+  .beat .label{display:inline-block;font-size:11.5px;letter-spacing:1.4px;text-transform:uppercase;
+    font-weight:700;color:#fff;background:var(--oak);padding:2px 9px;border-radius:4px;margin-bottom:6px}
+  .beat.words .label{background:var(--oak-deep)}
+  .beat.why .label{background:#7a6a3f}
+  .beat.drill .label{background:var(--green)}
+  .beat p{margin:4px 0 0}
+  .beat.words p{font-style:italic;color:var(--ink-soft);border-left:3px solid var(--gold);padding-left:14px}
+  .beat.drill{background:#f1f5ee;border-radius:7px;padding:12px 14px;border:1px solid #d6e0cf}
+  .breath{background:var(--parch-2);border:1px dashed var(--oak);border-radius:8px;padding:14px 20px;
+    margin:22px 0 8px;font-size:15.5px}
+  .breath b{color:var(--oak-deep);text-transform:uppercase;letter-spacing:1px;font-size:12.5px}
+  /* Tools */
+  .tool{background:var(--card);border:1px solid var(--rule);border-radius:9px;padding:22px 24px;
+    margin:18px 0;box-shadow:var(--shadow)}
+  .tool h3{margin:0 0 4px;font-size:22px;color:var(--oak-deep)}
+  .tool .lede{color:var(--ink-soft);font-size:15px;margin:0 0 14px}
+  .check{display:flex;gap:12px;align-items:flex-start;padding:9px 0;border-bottom:1px solid var(--parch-2)}
+  .check input{margin-top:6px;width:18px;height:18px;accent-color:var(--oak);flex:0 0 auto;cursor:pointer}
+  .check label{cursor:pointer;font-size:15.5px}
+  .check .q{font-weight:700}
+  .progress{height:9px;background:var(--parch-2);border-radius:5px;overflow:hidden;margin:14px 0 4px}
+  .progress > div{height:100%;width:0;background:linear-gradient(90deg,var(--oak),var(--gold));transition:width .3s}
+  .ptext{font-size:13px;color:var(--ink-soft);font-style:italic}
+  /* Temperature tool */
+  .temp-row{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:center;
+    padding:8px 0;border-bottom:1px solid var(--parch-2);font-size:15px}
+  .temp-row .dim{font-weight:700}
+  .temp-row .opt{font-size:13px;color:var(--ink-soft)}
+  .seg{display:inline-flex;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+  .seg button{all:unset;cursor:pointer;padding:5px 11px;font-size:12.5px;color:var(--ink-soft)}
+  .seg button.hot.on{background:var(--red);color:#fff}
+  .seg button.cold.on{background:var(--green);color:#fff}
+  .verdict{margin-top:16px;padding:14px 18px;border-radius:8px;background:var(--parch-2);font-size:15.5px}
+  .verdict b{color:var(--oak-deep)}
+  /* Quotes */
+  .quote{border-left:3px solid var(--gold);padding:6px 0 6px 16px;margin:12px 0;font-style:italic;color:var(--ink-soft)}
+  footer{margin-top:60px;padding-top:18px;border-top:1px solid var(--rule);font-size:13px;color:var(--ink-soft);font-style:italic}
+  .controls{display:flex;gap:10px;margin:10px 0 0}
+  .controls button{font-family:inherit;font-size:13px;cursor:pointer;background:var(--oak);color:#fff;
+    border:0;border-radius:6px;padding:7px 14px}
+  .controls button.ghost{background:transparent;color:var(--oak-deep);border:1px solid var(--oak)}
+  @media(max-width:860px){
+    .wrap{grid-template-columns:1fr}
+    nav.toc{position:static;height:auto;border-right:0;border-bottom:1px solid var(--rule)}
+    main{padding:30px 22px 80px}
+    .hero h1{font-size:32px}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav class="toc">
+    <h1>The Marks Method</h1>
+    <div class="sub">Study Course</div>
+    <div id="tocList"></div>
+    <div class="tools">
+      <a class="part" href="#tools">Interactive Tools</a>
+      <a class="concept" href="#checklist">▸ Standing Checklist</a>
+      <a class="concept" href="#temperature">▸ Market Temperature</a>
+      <a class="concept" href="#armory">▸ Quotation Armory</a>
+    </div>
+    <div class="controls">
+      <button onclick="openAll()">Expand all</button>
+      <button class="ghost" onclick="closeAll()">Collapse</button>
+    </div>
+  </nav>
+
+  <main>
+    <div class="hero">
+      <div class="eyebrow">A Training Curriculum for the Aspiring Portfolio Manager</div>
+      <h1>The Marks Method</h1>
+      <p class="tag">From first principles to the seat at the head of the table</p>
+      <div class="epigraph">"If we avoid the losers, the winners take care of themselves."<span class="who">— The Oaktree credo</span></div>
+      <div class="epigraph">"There's no asset so good that it can't become overpriced and thus dangerous, and there are few assets so bad that they can't get cheap enough to be a bargain."<span class="who">— Howard Marks</span></div>
+    </div>
+
+    <div class="howto">
+      <b>How to use this course.</b> This is not a page you read once — it's a curriculum you train against until the moves are reflexes. Everything here is built from Howard Marks's Oaktree memos (1990–2026) and his books <i>The Most Important Thing</i> (2011) and <i>Mastering the Market Cycle</i> (2018). The order is cumulative: each part assumes the one before it. Click any concept to open its four beats — <b>the idea</b>, <b>in Marks's words</b> (with the source), <b>why it matters</b>, and <b>the drill</b> you actually practice. When a concept cites a memo, read that memo: this course is the map; the memos are the territory.
+    </div>
+
+    <div id="content"></div>
+
+    <h2 id="tools" class="parthead" style="border-top:2px solid var(--oak)"><span class="pn">Practice</span><br>Interactive Tools</h2>
+
+    <div class="tool" id="checklist">
+      <h3>The Portfolio Manager's Standing Checklist</h3>
+      <p class="lede">Before any portfolio decision is final, every box gets an honest answer. Tick them as you work a real decision.</p>
+      <div id="checkItems"></div>
+      <div class="progress"><div id="checkBar"></div></div>
+      <div class="ptext" id="checkText">0 of 12 answered.</div>
+      <div class="controls"><button class="ghost" onclick="resetChecks()">Reset</button></div>
+    </div>
+
+    <div class="tool" id="temperature">
+      <h3>Taking the Market's Temperature</h3>
+      <p class="lede">You don't forecast — you locate. Mark where each reading sits today. Most marks in the <b style="color:var(--red)">hot</b> column → be defensive. Most in the <b style="color:var(--green)">cold</b> column → the odds favor offense. <i>You're not predicting the turn; you're calibrating to the odds.</i></p>
+      <div id="tempRows"></div>
+      <div class="verdict" id="tempVerdict">Mark the readings above to take the temperature.</div>
+      <div class="controls"><button class="ghost" onclick="resetTemp()">Reset</button></div>
+    </div>
+
+    <div class="tool" id="armory">
+      <h3>The Quotation Armory</h3>
+      <p class="lede">The lines to know cold.</p>
+      <div id="quotes"></div>
+    </div>
+
+    <footer>
+      Built entirely from Howard Marks's Oaktree memos (1990–2026) and his books <i>The Most Important Thing</i> (2011) and <i>Mastering the Market Cycle</i> (2018). Marks supplies the judgment; you supply the discipline to use it.
+    </footer>
+  </main>
+</div>
+
+<script>
+const CURRICULUM = [
+ {part:"Part I — The Mind Before the Method", intro:"Five ideas have to become the floor you stand on — so automatic you no longer notice you're using them.",
+  concepts:[
+   {n:1,t:"Optimization, Not Maximization",
+    idea:"The aim is not the highest possible return — it's the <i>right</i> return for the right amount of risk, given who the investor is. The absolute level of risk must be consciously chosen, never left as an accidental byproduct of reaching for return.",
+    words:"\"The avoidance of losses is more important than the achievement of great successes.\" — Oaktree philosophy (see <i>Oaktree at Ten</i>, 2005; <i>What's Your Game Plan?</i>, 2003).",
+    why:"Replaces the scoreboard. A 20% return earned by betting the firm is a worse outcome, judged properly, than 10% earned safely — the first is a process that eventually kills you, and you can't compound from a permanent loss.",
+    drill:"Refuse to evaluate any return until you can answer: what risk was taken to produce it, and what was the worst plausible outcome that didn't happen? A return without its risk is half a sentence."},
+   {n:2,t:"Price Is Not Value — the master distinction",
+    idea:"Value comes from fundamentals; price is what mood, momentum, and fear/greed do to value at any moment. They're two different numbers, and the gap between them is where all opportunity and danger live. Investing well is buying things for less than they're worth.",
+    words:"\"It's not what you buy, it's what you pay that counts.\" \"Good investing doesn't come from buying good things, but from buying things well.\" (<i>The Most Important Thing</i>, Ch. 3–4; seeded in the 2003 memo <i>The Most Important Thing</i>.)",
+    why:"First-level thinking — 'great company, buy it' — omits the only variable that determines your return: the price. A rising price is not evidence of rising value; often it's the opposite, because enthusiasm has pulled future return into the past.",
+    drill:"For any asset, force two separate columns before forming a view: (a) what is it worth? (fundamentals only) and (b) what is the crowd's mood doing to its price? State out loud: 'I am now reasoning about value' or '…about price.'"},
+   {n:3,t:"The Two Asset Classes: Ownership & Debt",
+    idea:"Strip the labels and there are two things you can do with capital: own (residual claim, real up and downside, widest range of outcomes) or lend (contractual, capped, tighter range). They differ in kind, not degree. Every portfolio is a blend of the two.",
+    words:"Everything finer — which equities, which credits, public vs. private — is \"just details, the options available for reaching your targeted risk posture.\" (<i>Ruminating on Asset Allocation</i>, 2024.)",
+    why:"Replaces product-driven thinking with structural thinking. A high-yield bond and a stock aren't 'two holdings' — they're a loan and an ownership stake with fundamentally different shapes of outcome.",
+    drill:"Re-express any portfolio as a single ownership-vs-debt ratio: what fraction is making a residual, equity-like bet, and what fraction a contractual, lending bet? That ratio tells you more than the list of holdings."},
+   {n:4,t:"Second-Level Thinking",
+    idea:"To earn above-average returns your thinking must be both different from the consensus and more correct than it. First-level: 'good company, buy.' Second-level: what does the crowd already believe, what's already in the price, and how might reality differ?",
+    words:"\"First-level thinking says, 'It's a good company; let's buy the stock.' Second-level thinking says, 'It's a good company, but everyone thinks it's great, and it's not… let's sell.'\" (<i>The Most Important Thing</i>, Ch. 1.)",
+    why:"Good analysis alone doesn't produce good returns — if it reaches the same conclusion as everyone else's, the price already reflects it. Edge is the difference between your view and the consensus, times the odds you're the one who's right.",
+    drill:"Write the consensus first — one sentence, fairly stated, as its believers would put it — before your own view. If you can't state the consensus, you only have an echo of it. A second-level thinker can argue the other side better than its advocates."},
+   {n:5,t:"The 'I Don't Know' School",
+    idea:"The future — economy, rates, the market — is not reliably knowable. Say so honestly and build accordingly. But this humility is not paralysis: 'We can't predict, but we can prepare.'",
+    words:"\"It's frightening to think that you might not know something, but more frightening to think that, by and large, the world is run by people who have faith that they know exactly what's going on.\" (<i>The Most Important Thing</i>, Ch. 14; <i>You Can't Predict, You Can Prepare</i>, 2001.)",
+    why:"Replaces the industry's central pretense — that someone can tell you what's going to happen. The macro-forecasting record is poor; a portfolio staked on one forecast is fragile. Substitute preparation for prediction.",
+    drill:"Rewrite every prediction — 'rates will…', 'the market will…' — as a range with a response: the plausible outcomes, the portfolio's behavior in each, and the single assumption it's most sensitive to. Ask forecasters for their record, not their forecast."}
+  ]},
+ {part:"Part II — Risk: The Center of Everything", intro:"Rebuild your definition of risk from the ground up. Lead with the downside before the upside — always.",
+  concepts:[
+   {n:6,t:"Risk Is Not Volatility",
+    idea:"The academy defines risk as volatility because it's measurable — but measurable isn't relevant. Real risk is the probability of permanent loss of capital: the chance you don't get your money back.",
+    words:"\"Risk means more things can happen than will happen.\" Investors reject volatility instinctively: 'I'm not buying that, because I might lose money' — not 'because its price might fluctuate.' (<i>Risk</i>, 2006; <i>The Most Important Thing</i>, Ch. 5.)",
+    why:"Volatility-as-risk lets people call a portfolio 'low risk' because returns were smooth — right up until the smoothness ended in ruin. Calm assets look 'safe' precisely when they've become most dangerous.",
+    drill:"When anyone says 'risky' or 'safe,' ask: do you mean it might fluctuate, or that I might permanently lose money? Then ask the only question that counts — under what circumstances do I not get my capital back?"},
+   {n:7,t:"The Risk/Return Relationship, Correctly Drawn",
+    idea:"The textbook's straight rising line makes it look certain that more risk yields more return. It doesn't. The correct picture adds, at each step up the risk axis, a distribution that fans out and whose bad tail gets worse.",
+    words:"\"The linearity of that relationship makes it appear too certain that increased risk will lead to increased return.\" As you move right, \"the expected return is higher, but the range of possible outcomes becomes wider and the bad outcomes become worse.\" (<i>Risk</i>, 2006.)",
+    why:"A higher return is only ever a compensation offered for risk, never a promise delivered. If riskier assets reliably returned more, they wouldn't be riskier. The fanning distribution is the single most important picture in the method.",
+    drill:"When reaching for return, draw the fan: don't just ask 'what's the higher expected return?' Ask 'how much wider does the range get, and how much worse does the worst case become?' If the worst case is unsurvivable, the higher expected return is irrelevant."},
+   {n:8,t:"Risk Is Highest When It Feels Lowest",
+    idea:"Risk is not fixed in an asset — it's largely a function of the price you pay and the crowd's psychology. The same asset is high-risk at a high price, low-risk at a low one. And risk is highest exactly when investors feel safest, because that comfort inflates prices and removes the margin of safety.",
+    words:"\"The riskiest thing in the world is the belief that there's no risk.\" When everyone thinks something is risky and won't buy it, the price falls until it isn't risky at all. (<i>The Most Important Thing</i>, Ch. 6; <i>Risk</i>, 2006.)",
+    why:"Perceived risk and actual risk are usually inverses. The crowd's fear does your risk-reduction work by collapsing price; its confidence raises real risk by inflating price. Bargains are in the unloved; disasters in the adored.",
+    drill:"When something feels safe and consensual ('this can only go up'), treat the feeling as a warning, not a green light. When something feels friendless and frightening, ask whether the fear has already collapsed the price for you. Be uneasy in comfort, curious in fear."},
+   {n:9,t:"Risk Control vs. Risk Avoidance",
+    idea:"To avoid risk entirely is to avoid return entirely — that's not the goal. The goal is to bear risk consciously and well: only when paid adequately, sized so the bad outcomes survive, and knowing exactly how much you hold.",
+    words:"\"The road to long-term investment success runs through risk control more than through aggressiveness.\" The superior investor bears risk knowingly and gets paid well for doing so. (<i>Risk Revisited</i>, 2014; <i>The Most Important Thing</i>, Ch. 7.)",
+    why:"Avoids two opposite errors: the reckless investor who bears risk without being paid, and the timid one who confuses avoiding all risk with prudence. Risk control shows its value only in bad times that may not arrive for years — so prudence can look over-cautious for a long stretch and still be right.",
+    drill:"For every position, finish the sentence: 'I bear this risk because I'm paid X; if the bad case hits I lose Y, survivable because Z.' If you can't finish it, you're avoiding thought, not risk."},
+   {n:10,t:"The Margin of Safety",
+    idea:"Buy at a price enough below your estimate of value that you can be wrong — about the value, the future, the timing — and still avoid permanent loss. The margin of safety is the room for error you build in before the bad scenario.",
+    words:"The defensive investor's emphasis is on \"assuring survival under adverse circumstances\" and \"margin for error.\" Because you can't predict, you must demand it. (<i>The Most Important Thing</i>, Ch. 8 & 17; <i>You Can't Predict, You Can Prepare</i>, 2001.)",
+    why:"Replaces precision with robustness. The first-level analyst bets on hitting the single 'right' number; Marks, holding the future unknowable, demands a cushion instead. Margin of safety is humility made operational.",
+    drill:"Separate two numbers: your estimate of value and the price you'd actually pay. Name the gap as a percentage — that's your margin of safety. Then stress it: if my estimate is 30% too high, do I still avoid permanent loss?"}
+  ]},
+ {part:"Part III — Cycles & Psychology", intro:"You can't predict the future, but you can know where you stand — and where you stand is set by the cycle, driven by psychology.",
+  concepts:[
+   {n:11,t:"The Pendulum of Investor Psychology",
+    idea:"Sentiment swings like a pendulum between euphoria and despair, greed and fear, credulity and skepticism. It spends very little time at the rational midpoint — it's almost always traveling toward an extreme or recovering from one.",
+    words:"\"The mood swings of the securities markets resemble the movement of a pendulum… the midpoint best describes its location 'on average' — but it actually spends very little time there.\" (<i>The Most Important Thing</i>, Ch. 9.)",
+    why:"Replaces the efficient-market assumption. Manic-depressive markets are exactly why opportunity exists: greed lifts price above value (danger), fear pushes it below (bargains). Knowing the pendulum is near an extreme tells you something genuinely useful about the odds.",
+    drill:"Stop asking 'what will the market do?' Ask 'where is the pendulum right now — toward greed or fear, and how far?' Track the tells: how easily is bad news dismissed? How eagerly is risk embraced or shunned? Locate the swing; lean against it."},
+   {n:12,t:"The Anatomy of a Cycle",
+    idea:"Cycles aren't symmetrical waves — they're self-reinforcing processes of excess and correction. Success breeds confidence breeds risk-taking breeds excess breeds the correction. The swing to an extreme supplies the energy for the swing back.",
+    words:"\"Trends create the reasons for their own reversal.\" \"In the real world things fluctuate between 'pretty good' and 'not so hot.' But in investing, perception often swings from 'flawless' to 'hopeless.'\" (<i>Mastering the Market Cycle</i>, 2018; <i>The Race to the Bottom</i>, 2007.)",
+    why:"Replaces linear extrapolation — the deadly habit of assuming current conditions continue. Watch the credit cycle especially: easy money and loosening lending standards build the next bust; frozen credit births the next opportunity.",
+    drill:"When conditions are good, ask 'what is this success setting up?' When terrible, ask 'what is this fear setting up?' Watch credit as a leading tell: standards loosening (late-cycle excess) or slammed shut (opportunity born)?"},
+   {n:13,t:"The Three Stages of the Bull (and Bear)",
+    idea:"A bull market unfolds in three stages defined by belief: (1) a few forward-lookers begin to believe things will improve; (2) most realize improvement is happening; (3) everyone concludes things will get better forever. The bear is the mirror.",
+    words:"\"What the wise man does in the beginning, the fool does in the end.\" The great money — and the great safety — is in acting at Stage One, before optimism is in the price. (<i>The Most Important Thing</i>, Ch. 8; recurs across the memos.)",
+    why:"Replaces price-watching with belief-watching. Stage Three of a bull — 'there's no price too high' — is the literal sound of a bubble and the most dangerous moment to buy, even though it feels safest.",
+    drill:"Place any market on the scale: who believes the story, and how widely? A few forward-lookers (Stage 1), the mainstream (Stage 2), or literally everyone (Stage 3)? Greatest caution at Stage 3 of the bull; greatest courage at Stage 3 of the bear."},
+   {n:14,t:"Taking the Market's Temperature",
+    idea:"Since you won't forecast, do this instead: read the observable signs of where sentiment, valuation, and credit sit relative to history, and calibrate aggressiveness. More defensive when hot; more aggressive when cold.",
+    words:"A checklist of paired descriptors — Lenders: eager/reluctant; Capital markets: loose/tight; Asset prices: high/low; Prospective returns: low/high. \"If most checkmarks are in the left column, we should be cautious.\" \"We may never know where we're going, but we'd better have a good idea where we are.\" (<i>The Most Important Thing</i>, Ch. 15; <i>Risk Revisited</i>, 2014.)",
+    why:"Replaces forecasting with assessment — a knowable thing (where we are) in place of an unknowable one (where we're going). The practical heart of 'you can't predict, you can prepare.'",
+    drill:"Use the Market Temperature tool below on a regular schedule. Count the checkmarks. Most in the hot column → be defensive (not because you predict a fall, but because odds and margin of safety have deteriorated). Make it a standing ritual."},
+   {n:15,t:"Contrarianism, Done With Discipline",
+    idea:"Great opportunities require acting against the crowd — buying the unloved, selling the adored. But contrarianism isn't reflexive opposition: you depart from consensus only when you've done the work to know why the crowd is wrong, and you must have the fortitude to be early and alone.",
+    words:"\"The most profitable investment actions are by definition contrarian: you're buying when everyone else is selling and the price is therefore low.\" It requires being willing to \"look wrong for a while.\" (<i>The Most Important Thing</i>, Ch. 11; <i>Dare to Be Great</i>, 2006 & 2014.)",
+    why:"Bargains exist only where the consensus is pessimistic — if everyone agreed something was cheap, it wouldn't be. Superior returns are structurally only available where it feels bad to buy. Closet-indexers can't outperform; only the willing-to-be-unconventional can.",
+    drill:"When you're comfortable and agreeing with everyone, assume you have no edge there. Hunt where it hurts — the unloved, the forced-sold — and do the second-level work to confirm the crowd is wrong before acting. Pair every contrarian instinct with the analysis that justifies it."}
+  ]},
+ {part:"Part IV — The Master Decision: Risk Posture & Construction", intro:"The whole method converges here. The most important decision is not which securities — it's the balance between offense and defense.",
+  concepts:[
+   {n:16,t:"Start With the Investor, Not the Assets",
+    idea:"No allocation is right or wrong in the abstract — only for a specific investor. Begin with the person: horizon, financial condition, income and spending needs, liabilities, liquidity, taxes, and intestinal fortitude — the ability to hold through swings without bailing at the worst moment.",
+    words:"The right posture fits \"the investor's circumstances, needs, and ability to live with fluctuations.\" The ability to hold on through a downturn — to not be a forced seller at the bottom — determines how much risk they can truly bear. (<i>Ruminating on Asset Allocation</i>, 2024.)",
+    why:"The same portfolio that's prudent for a 30-year-old can ruin a retiree drawing down — not because the assets changed but because the bearer did. The most dangerous mismatch is a portfolio whose risk exceeds its owner's ability to hold it, because that turns a drawdown into a permanent loss.",
+    drill:"Refuse to discuss allocation until you've written down: horizon, income/outflows, assets/liabilities, liquidity, taxes, and honest tolerance for a one-third fall. If 'what to buy' arrives without this, your first move is to ask for the investor, not answer with an asset."},
+   {n:17,t:"Setting the Risk Posture — Offense vs. Defense",
+    idea:"The single most important portfolio decision is the balance between offense (growing capital) and defense (preserving it) — because you cannot maximize both at once. You must consciously choose where on that spectrum to sit. Every other choice is downstream.",
+    words:"\"You can't simultaneously emphasize both preservation of capital and maximization of growth, or defense and offense. This is the fundamental, inescapable truth in investing.\" Everything else is \"just details.\" (<i>Ruminating on Asset Allocation</i>, 2024.)",
+    why:"Replaces the fantasy of 'high returns, low risk.' A portfolio's risk level should be decided first and on purpose, then built to — not discovered afterward, having assembled holdings that each looked attractive. A manager who jumps to tickers without fixing the posture has skipped the only step that can't be fixed later.",
+    drill:"State the posture out loud and first: 'This portfolio is X% offense / Y% defense, because the investor's situation calls for it.' Then decide: fixed, or cycle-varying — and by what observable signal? The posture is the thesis; the holdings are merely its expression."},
+   {n:18,t:"Translating Posture into Ownership vs. Debt",
+    idea:"Express the posture as a blend of the two asset classes. More offense → more ownership; more defense → more debt. The mix is governed by today's return distributions — how much extra return ownership offers over debt now, and at what downside cost. The crucial insight: the cost of defense varies.",
+    words:"When credit's prospective return approaches equities', the case for defense strengthens — you're paid nearly as much to take the lower-risk path. When rates rose, \"lenders and bargain hunters face much better prospects.\" (<i>Ruminating on Asset Allocation</i>, 2024; <i>Sea Change</i>, 2022.)",
+    why:"Replaces static rules of thumb ('60/40 because that's the rule') with a posture-driven, price-aware mix. When high-quality debt yields nearly what equities might return, defense is cheap — ask why you're reaching into ownership at all. When debt yields nothing, the 'safe' allocation costs you the whole point.",
+    drill:"Express every posture as an ownership/debt ratio, then pressure-test against today's offerings: what is debt yielding vs. the plausible return — and downside — on ownership? Let the mix move with the relationship between the two, not with convention."},
+   {n:19,t:"Aggressiveness & Defensiveness Across the Cycle",
+    idea:"If you flex the posture, flex it against instinct: more defensive as the temperature runs hot, more aggressive as it runs cold. You're not predicting the turn; you're adjusting to the odds and the margin of safety on offer, which deteriorate at the top and improve at the bottom.",
+    words:"Move to the risky end only when well compensated. Marks modeled it: defensive and warning through 2005–07 (<i>The Race to the Bottom</i>), then deploying aggressively into the wreckage of late 2008 (<i>The Limits to Negativism</i>) — buying 'every day' when the compensation for risk was extraordinary.",
+    why:"Replaces momentum-chasing — getting more confident as prices rise and more fearful as they fall. The hard part is doing it: dialing up defense at the top means underperforming the euphoric crowd for a while; dialing up offense at the bottom means buying while everything still feels terrible.",
+    drill:"Tie posture adjustments to the temperature checklist, not your gut or recent price action. Accept that you'll be early and look wrong for a stretch — the aim is correct positioning for the odds, not catching the turn. If you can't stomach that, hold the posture constant. Pre-commit in writing while calm."},
+   {n:20,t:"The Honest Question of Alpha",
+    idea:"Alpha is genuine, repeatable skill — returns better than the risk taken would explain. Markets aren't efficient enough to make it impossible, but real alpha is rare and most who claim it don't have it. Default: assume you don't, treat low-cost broad exposure as the baseline, and depart only with a clear, skeptical reason.",
+    words:"Markets incorporate information fast but the consensus \"can be far from correct.\" Yet \"many of the managers thought to have alpha actually don't\" — a great record can be luck or a favorable environment, not skill. (<i>What's It All About, Alpha?</i>, 2001; <i>Getting Lucky</i>, 2014.)",
+    why:"Threads two delusions: the efficient-market dogma that no one can outperform (false — inefficiency is real), and the far more common assumption of one's own skill. Alpha is asymmetry: a skilled investor captures more of the upside than the downside, across cycles. A record that's only good in rising markets is beta in alpha's clothes.",
+    drill:"Default to humility. When evaluating any record — including your own — separate skill from environment and luck: would this have worked in a different decade? Is upside capture greater than downside capture? Be the hardest skeptic of your own apparent brilliance."}
+  ]},
+ {part:"Part V — The Craft of Decisions", intro:"The repeatable workflow from a blank page to a built portfolio — and the judgment inside each decision. Run it every time, in order.",
+  concepts:[
+   {n:21,t:"The Seven-Step Portfolio Process",
+    idea:"The order is the point — most people start at Step 7. (1) Start with the investor. (2) Set the risk posture. (3) Express it as ownership vs. debt. (4) Compare price to value, separately, and locate the cycle. (5) Decide honestly whether to reach for alpha. (6) Stress-test the downside. (7) Produce a range and the key swing factor.",
+    words:"Decide how much risk to bear before you decide what to buy, and always know what could prove you wrong. \"We may never know where we're going, but we'd better have a good idea where we are.\" (<i>What's Your Game Plan?</i>, 2003; <i>Ruminating on Asset Allocation</i>, 2024.)",
+    why:"The sequence forbids the amateur's move — jumping straight to tickers. If you reach for a security before Step 4, you've skipped the steps that actually determine the outcome.",
+    drill:"Run a real portfolio through all seven, in order, one honest paragraph each. Use the companion Drill Workbook. Do it until the sequence is automatic."},
+   {n:22,t:"Where Bargains Come From",
+    idea:"Bargains aren't found by sharper arithmetic — they're created by forces that push price away from value: psychological extremes, forced selling, and unloved status. A bargain almost always has a reason it's cheap that feels like a good reason to avoid it.",
+    words:"Bargains are found among things \"unknown and not fully understood; controversial, unseemly or scary; unappreciated, unpopular and unloved; recently the subject of disinvestment.\" The greatest appear when forced selling dumps assets on a market too small to absorb them. (<i>The Most Important Thing</i>, Ch. 12–13; <i>The Limits to Negativism</i>, 2008.)",
+    why:"Tells you where to look — not at what's celebrated and rising, but at what's painful and falling. Forced selling is the single best source, because the seller is price-insensitive. To be the buyer you need dry powder and steadiness.",
+    drill:"Keep a running list of the unloved and forced-sold. For each, ask the second-level question: is the bad news now over-reflected in the price? Pre-decide what you'd buy and at what price, because fear makes fresh analysis nearly impossible in the moment."},
+   {n:23,t:"Sizing, Conviction & the Dare to Be Great",
+    idea:"To outperform, a portfolio must differ from the benchmark — and the more it differs, the wider its range of outcomes. Sizing expresses conviction proportionally: bigger where edge and margin of safety are greatest, never so large that being wrong causes unrecoverable loss.",
+    words:"\"How can the manager hope to be above average if he doesn't dare to be different?\" But survival first: \"to take advantage of opportunities, you have to get through the bad times.\" (<i>Dare to Be Great</i>, 2006 & 2014.)",
+    why:"Avoids both closet-indexing (differing too little to outperform) and reckless concentration (one error is fatal). Conviction earns size; uncertainty earns restraint; nothing earns a position large enough to end the game.",
+    drill:"Set each position's size from two inputs only: strength of edge/margin of safety, and survivability of being wrong. Ask: 'If this goes against me as badly as it plausibly can, is the loss survivable for the whole portfolio?' If not, cut the size — regardless of conviction."},
+   {n:24,t:"Stress-Testing the Downside",
+    idea:"Before committing, model the bad case — not the expected case — and ask what permanent loss looks like. Your edge is in having faced the outcomes people prefer not to imagine. This makes risk control, margin of safety, and sizing operational.",
+    words:"The defensive investor emphasizes \"making sure you'll survive under adverse circumstances… the avoidance of loss in down markets.\" \"More things can happen than will happen\" — so ask which of them would cause permanent damage. (<i>The Most Important Thing</i>, Ch. 5–8, 17.)",
+    why:"Most blow-ups happen not because the bad scenario was unforeseeable but because it was unexamined — nobody asked. Asking 'what's the permanent-loss case, and can we survive it?' before sizing separates a risk-controlled portfolio from a lucky one.",
+    drill:"Run a pre-mortem before you size: 'It's two years out and this caused real, permanent damage — what happened?' Write the story. Then ask whether the portfolio survives it. Downside first isn't a step — it's the posture of the whole process."},
+   {n:25,t:"Process vs. Outcome — and the Role of Luck",
+    idea:"In a world of randomness, a good decision can produce a bad outcome and vice versa over any short stretch. Judge decisions by their quality at the time they were made, not solely by how they turned out. Results are too contaminated by luck to grade skill in the short run.",
+    words:"\"You can't tell the quality of a decision from the outcome.\" Sometimes someone makes a risky bet on an improbable outcome and looks like a genius — \"because of luck and boldness, not skill.\" (<i>Getting Lucky</i>, 2014; <i>The Most Important Thing</i>, Ch. 16.)",
+    why:"Results-based thinking rewards reckless bets that won (teaching you to repeat them) and punishes sound bets that lost (teaching you to abandon them). Judging process keeps you doing the right things when luck runs against you — and humble when it runs for you.",
+    drill:"Keep a decision journal: record your reasoning, foreseen outcomes, and key assumption at decision time. Later, grade the decision against what you knew then. Separate 'good decision, bad luck' from 'bad decision, good luck' — and never let a lucky win inflate your sense of skill."}
+  ]},
+ {part:"Part VI — The Boundary of the Framework", intro:"A master is defined as much by what they refuse to fake. The line between Marks's judgment and the mechanics he doesn't teach.",
+  concepts:[
+   {n:26,t:"Where Judgment Ends and Mechanics Begin",
+    idea:"Marks's work is a philosophy of risk, cycles, price, and the offense/defense decision — not a manual for the mechanics of construction. He offers principle but little procedure on: diversification & correlation math, mean-variance optimization & the efficient frontier, factor investing, specific rebalancing rules, and the handling of taxes, fees, and account location.",
+    words:"His skepticism is itself a teaching: optimization models fed by historical inputs are \"garbage in, garbage out,\" and the precision lends false comfort that is itself a risk.",
+    why:"The fastest way to discredit yourself — and to make a real error — is to dress a mechanical technique in Marks's authority, as if 'the efficient frontier' were his philosophy. It isn't. When a question turns on mechanics, say you're stepping outside his writing.",
+    drill:"Learn to feel the boundary. 'How much risk, when to be aggressive, what's cheap, what could go wrong' → Marks; answer in his frame. 'Correlation matrix, optimizer, factor loadings, rebalance bands, tax-lots' → mechanics; flag the switch, then bring the right tool."},
+   {n:27,t:"Importing Tools Without Corrupting the Judgment",
+    idea:"You'll need mechanics to run money — but keep the two layers distinct. Marks supplies the judgment and priorities; the mechanics layer supplies implementation. The tools serve the judgment; they never override it, and never get presented as the philosophy.",
+    words:"Models built on historical inputs are usually \"garbage in, garbage out,\" with \"the added danger that the math lends false comfort.\" Use the optimizer holding that skepticism.",
+    why:"A manager who lets the optimizer decide has inverted the hierarchy — letting a tool that's confident about an unknowable future overrule the human judgment that knows it's unknowable.",
+    drill:"When you reach for a tool, narrate the hierarchy: 'Marks's judgment says the posture is X and the downside to avoid is Y; I'm using this tool to implement that, treating its output as a rough input, not a verdict.' If the tool contradicts the judgment, the judgment wins until you can explain — in Marks's terms — why not."}
+  ]},
+ {part:"Part VII — Becoming the Person", intro:"Knowing the framework isn't being the kind of person who runs money this way. This is the practice that turns curriculum into character.",
+  concepts:[
+   {n:28,t:"The Discipline of Writing",
+    idea:"Marks's thinking was made by writing — a memo since 1990, for the first ten years to almost no response. Writing is how you discover whether you actually think something or merely feel it. It's not how you communicate your thinking; it's how you do your thinking.",
+    words:"A vague intuition feels like insight until you try to write it down and can't. Writing the case for a position — then the strongest case against it — is second-level thinking made physical.",
+    why:"Forcing a view onto the page exposes the gaps, the hand-waving, the slogans standing in for arguments. Kept memos also build an honest record you can re-read to see how often your confident calls were wrong — the cure for overconfidence.",
+    drill:"Every week, one short memo on one real decision: the consensus, fairly stated; your divergent view; the downside; the single thing that would prove you wrong. Keep them. Re-read the old ones. If you can't write the argument, you don't have it yet."},
+   {n:29,t:"Emotional Control as a Competitive Edge",
+    idea:"The hardest part isn't intellectual — it's emotional. Buying at Stage One when it's frightening, holding defense at the top while the crowd gets rich, sitting on cash when everyone's making money. Emotional control is itself an edge — perhaps the scarcest one.",
+    words:"\"The biggest investing errors come not from factors that are informational or analytical, but from those that are psychological.\" The enemies: greed, fear, conformity, surrender of skepticism, envy. (<i>The Most Important Thing</i>, Ch. 10; <i>The Race Is On</i>, 2013.)",
+    why:"Every concept here can be known cold and still fail if you can't withstand the pressure to abandon it. The crowd's greed tempts you to chase the top; its fear to sell the bottom; envy of others' returns to drop your discipline at the worst moment.",
+    drill:"Pre-commit while calm: write your posture, rules, and downside limits in advance, so in the heat you follow a clear-headed decision instead of a hijacked one. Practice doing nothing when there's nothing to do. Treat envy — 'everyone's getting rich but me' — as the emotion most likely to destroy your discipline near a top."},
+   {n:30,t:"The Reading Curriculum, In Order",
+    idea:"Read in sequence; argue with each. (1) <i>The Most Important Thing</i> — the mental models. (2) <i>Mastering the Market Cycle</i> — the pendulum and the cycle. (3) <i>Risk</i> → <i>Risk Revisited</i> → <i>Risk Revisited Again</i>. (4) <i>You Can't Predict, You Can Prepare</i>. (5) <i>Ruminating on Asset Allocation</i> — the master decision. (6) <i>Dare to Be Great</i> I & II. (7) <i>Getting Lucky</i>. (8) The cycle memos in real time — <i>bubble.com</i>, <i>The Race to the Bottom</i>, <i>The Limits to Negativism</i>, <i>On Bubble Watch</i>. (9) <i>Sea Change</i>.",
+    words:"The guide is the map; the memos are the territory. Watching Marks reason through 1998–2002 and 2005–2009 in real time — getting some things early, some imperfectly — is the apprenticeship.",
+    why:"You're not reading for conclusions; you're watching a mind work. A master doesn't know about this material — they've argued with it.",
+    drill:"Then read the rest of the memos chronologically. Read slowly. Mark them up. Disagree on paper, then see who was right and why."},
+   {n:31,t:"The Drills (collected)",
+    idea:"The habits from each part, as a daily/weekly practice: two-column value-vs-price (daily); state the consensus first (every view); convert predictions to ranges; draw the fan before any risk increase; be uneasy in comfort; take the temperature on a schedule; state the posture first; finish the risk sentence; name the margin of safety and stress it 30%; run the pre-mortem before sizing; keep the decision journal; write the weekly memo.",
+    words:"None of these is hard to understand. All of them are hard to do consistently, under emotional pressure. That consistency is the whole edge.",
+    why:"Mastery isn't more concepts — it's these few becoming reflexes you no longer have to summon. The Drill Workbook turns this list into a repeatable practice.",
+    drill:"Pick three to run this week — two-column, weekly memo, and the temperature reading are the highest-leverage starting set. Add the rest as each becomes automatic."}
+  ]}
+];
+
+const CHECKLIST = [
+ ["Whose money is this, and what do they need?","Horizon, outflows, liquidity, tolerance for a one-third fall. If unanswered, stop here."],
+ ["What is the chosen risk posture?","Offense/defense — and is it fixed or cycle-varying?"],
+ ["What is the ownership-vs-debt ratio?","Does it reflect what each is offering today and the current cost of defense?"],
+ ["For each exposure: value vs. price?","What's already priced in, and is the consensus too hot or too cold?"],
+ ["Where are we in the cycle?","Most checkmarks hot or cold? Which stage of belief?"],
+ ["Am I claiming alpha?","If so, what's the honest, skeptical evidence — skill or beta/luck?"],
+ ["What is the permanent-loss case?","And is it survivable at this size?"],
+ ["What's the margin of safety?","Named as a number and stress-tested?"],
+ ["What is the range of outcomes?","And the single assumption it's most sensitive to?"],
+ ["Have I confused price with value, or process with outcome, anywhere?",""],
+ ["Am I acting on analysis — or on greed, fear, or envy?",""],
+ ["Where might I be wrong, and what would tell me so?",""]
+];
+
+const TEMP = [
+ ["Economy","Vibrant","Sluggish"],
+ ["Lenders","Eager to lend","Reluctant"],
+ ["Capital markets","Loose","Tight"],
+ ["Capital","Plentiful","Scarce"],
+ ["Asset prices","High","Low"],
+ ["Prospective returns","Low","High"],
+ ["Risk","High","Low"],
+ ["Popular qualities","Aggressiveness","Caution & discipline"],
+ ["Mood / sentiment","Optimism & greed","Fear & pessimism"]
+];
+
+const QUOTES = [
+ "It's not what you buy, it's what you pay that counts.",
+ "Good investing doesn't come from buying good things, but from buying things well.",
+ "There's no asset so good that it can't become overpriced and thus dangerous, and there are few assets so bad that they can't get cheap enough to be a bargain.",
+ "If we avoid the losers, the winners take care of themselves.",
+ "You can't predict. You can prepare.",
+ "The riskiest thing in the world is the belief that there's no risk.",
+ "Risk means more things can happen than will happen.",
+ "You can't simultaneously emphasize both preservation of capital and maximization of growth, or defense and offense. This is the fundamental, inescapable truth in investing.",
+ "We may never know where we're going, but we'd better have a good idea where we are.",
+ "What the wise man does in the beginning, the fool does in the end.",
+ "The most profitable investment actions are by definition contrarian.",
+ "You can't tell the quality of a decision from the outcome."
+];
+
+// ---- Render curriculum ----
+const content = document.getElementById('content');
+const tocList = document.getElementById('tocList');
+CURRICULUM.forEach((p,pi)=>{
+  const pid = 'part'+pi;
+  const ph = document.createElement('div');
+  ph.className='parthead'; ph.id=pid;
+  ph.innerHTML = `<div class="pn">${p.part.split('—')[0].trim()}</div><h2>${p.part.split('—').slice(1).join('—').trim()}</h2><div class="intro">${p.intro}</div>`;
+  content.appendChild(ph);
+  const ta = document.createElement('a'); ta.className='part'; ta.href='#'+pid;
+  ta.textContent = p.part.split('—')[0].trim(); tocList.appendChild(ta);
+  p.concepts.forEach(c=>{
+    const cid='c'+c.n;
+    const div=document.createElement('div'); div.className='concept'; div.id=cid;
+    div.innerHTML=`<button onclick="toggle('${cid}')"><span class="num">${c.n}</span><span class="ctitle">${c.t}</span><span class="chev">▶</span></button>
+      <div class="body">
+        <div class="beat idea"><span class="label">The idea</span><p>${c.idea}</p></div>
+        <div class="beat words"><span class="label">In Marks's words</span><p>${c.words}</p></div>
+        <div class="beat why"><span class="label">Why it matters</span><p>${c.why}</p></div>
+        <div class="beat drill"><span class="label">The drill</span><p>${c.drill}</p></div>
+      </div>`;
+    content.appendChild(div);
+    const a=document.createElement('a'); a.className='concept'; a.href='#'+cid;
+    a.textContent=c.n+'. '+c.t; tocList.appendChild(a);
+  });
+});
+
+function toggle(id){document.getElementById(id).classList.toggle('open');}
+function openAll(){document.querySelectorAll('.concept').forEach(c=>c.classList.add('open'));}
+function closeAll(){document.querySelectorAll('.concept').forEach(c=>c.classList.remove('open'));}
+
+// ---- Checklist ----
+const ci=document.getElementById('checkItems');
+CHECKLIST.forEach((it,i)=>{
+  const d=document.createElement('div'); d.className='check';
+  d.innerHTML=`<input type="checkbox" id="chk${i}" onchange="updChk()"><label for="chk${i}"><span class="q">${i+1}. ${it[0]}</span>${it[1]?'<br><span style="font-size:13.5px;color:var(--ink-soft)">'+it[1]+'</span>':''}</label>`;
+  ci.appendChild(d);
+});
+function updChk(){
+  const boxes=document.querySelectorAll('#checkItems input');
+  const done=[...boxes].filter(b=>b.checked).length;
+  document.getElementById('checkBar').style.width=(done/boxes.length*100)+'%';
+  const t=document.getElementById('checkText');
+  t.textContent = done===boxes.length ? 'All 12 answered — the decision has been thought through.' : `${done} of ${boxes.length} answered.`;
+}
+function resetChecks(){document.querySelectorAll('#checkItems input').forEach(b=>b.checked=false);updChk();}
+
+// ---- Temperature ----
+const tr=document.getElementById('tempRows'); const tempState={};
+TEMP.forEach((row,i)=>{
+  const d=document.createElement('div'); d.className='temp-row';
+  d.innerHTML=`<span class="dim">${row[0]}</span>
+    <span class="seg"><button class="hot" onclick="setTemp(${i},'hot',this)">${row[1]}</button></span>
+    <span class="seg"><button class="cold" onclick="setTemp(${i},'cold',this)">${row[2]}</button></span>`;
+  tr.appendChild(d);
+});
+function setTemp(i,val,btn){
+  tempState[i]=val;
+  const row=btn.closest('.temp-row');
+  row.querySelectorAll('button').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  updTemp();
+}
+function updTemp(){
+  const vals=Object.values(tempState);
+  const hot=vals.filter(v=>v==='hot').length, cold=vals.filter(v=>v==='cold').length;
+  const v=document.getElementById('tempVerdict');
+  if(vals.length<3){v.innerHTML='Mark the readings above to take the temperature.';return;}
+  let lean,msg;
+  if(hot>cold+1){lean='DEFENSIVE';msg='Most readings are hot. Prices are high, optimism abundant, the margin of safety thin. Lean to defense — not because you predict a fall, but because the odds and the compensation for risk have deteriorated.';}
+  else if(cold>hot+1){lean='AGGRESSIVE';msg='Most readings are cold. Fear has done the selling, prices reflect the worst, and you are being well paid to bear risk. Lean to offense — accepting you may be early.';}
+  else{lean='BALANCED';msg='The readings are mixed. No extreme to lean hard against. Hold a measured posture and keep taking the temperature.';}
+  v.innerHTML=`<b>Reading: ${hot} hot · ${cold} cold → lean ${lean}.</b><br>${msg}`;
+}
+function resetTemp(){for(const k in tempState)delete tempState[k];document.querySelectorAll('.temp-row button').forEach(b=>b.classList.remove('on'));document.getElementById('tempVerdict').innerHTML='Mark the readings above to take the temperature.';}
+
+// ---- Quotes ----
+const qd=document.getElementById('quotes');
+QUOTES.forEach(q=>{const e=document.createElement('div');e.className='quote';e.textContent='"'+q+'"';qd.appendChild(e);});
+</script>
+</body>
+</html>
